@@ -1410,6 +1410,8 @@ class FastlySettings(FastlyObject, IServiceVersionObject):
 	FIELDS = [
 		"service_id",
 		"version",
+		"general.default_host",
+		"general.default_ttl",
 	]
 
 
