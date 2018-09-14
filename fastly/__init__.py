@@ -905,7 +905,7 @@ class FastlyConnection(object):
                         "content": content,
 		}, FastlyVCLSnippet.FIELDS)
 		content = self._fetch("/service/%s/version/%d/snippet" % (service_id, version_number), method="POST", body=body)
-		return FastlySyslog(self, content)
+		return FastlyVCLSnippet(self, content)
 
 	def get_vcl_snippet(self, service_id, version_number, name):
 		"""Get the VCL snippet for a particular service and version."""
@@ -918,7 +918,7 @@ class FastlyConnection(object):
                         kwargs['type'] = kwargs['_type']
 		body = self._formdata(kwargs, FastlyVCLSnippet.FIELDS)
 		content = self._fetch("/service/%s/version/%d/snippet/%s" % (service_id, version_number, urllib.quote(name_key, safe='')), method="PUT", body=body)
-		return FastlySyslog(self, content)
+		return FastlyVCLSnippet(self, content)
 
 	def delete_vcl_snippet(self, service_id, version_number, name):
 		"""Delete the VCL Snippet for a particular service and version."""
