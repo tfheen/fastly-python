@@ -893,7 +893,8 @@ class FastlyConnection(object):
 		        version_number,
 		        name,
 		        priority,
-                        _type
+                        _type,
+                        content,
 		        dynamic="0"):
 		"""Create a VCL snippet for a particular service and version."""
 		body = self._formdata({
@@ -901,6 +902,7 @@ class FastlyConnection(object):
 			"dynamic": str(dynamic),
 			"priority": priority,
 			"type": _type,
+                        "content": content,
 		}, FastlyVCLSnippet.FIELDS)
 		content = self._fetch("/service/%s/version/%d/snippet" % (service_id, version_number), method="POST", body=body)
 		return FastlySyslog(self, content)
@@ -1526,6 +1528,7 @@ class FastlyVCLSnippet(FastlyObject, IServiceVersionObject):
                 "dynamic",
 		"type",
 		"priority",
+                "content",
 	]
 
 
