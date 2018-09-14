@@ -882,6 +882,47 @@ class FastlyConnection(object):
 		content = self._fetch("/service/%s/version/%d/vcl/%s" % (service_id, version_number, urllib.quote(name, safe='')), method="DELETE")
 		return self._status(content)
 
+	def list_vcl_snippets(self, service_id, version_number):
+		"""List all of the VCL snippets for a particular service and version."""
+		content = self._fetch("/service/%s/version/%d/snippet" % (service_id, version_number))
+		return map(lambda x: FastlyVCLSnippet(self, x), content)
+
+	def create_vcl_snippet(
+		        self,
+		        service_id,
+		        version_number,
+		        name,
+		        priority,
+                        _type
+		        dynamic="0"):
+		"""Create a VCL snippet for a particular service and version."""
+		body = self._formdata({
+			"name": name,
+			"dynamic": str(dynamic),
+			"priority": priority,
+			"type": _type,
+		}, FastlyVCLSnippet.FIELDS)
+		content = self._fetch("/service/%s/version/%d/snippet" % (service_id, version_number), method="POST", body=body)
+		return FastlySyslog(self, content)
+
+	def get_vcl_snippet(self, service_id, version_number, name):
+		"""Get the VCL snippet for a particular service and version."""
+		content = self._fetch("/service/%s/version/%d/snippet/%s" % (service_id, version_number, urllib.quote(name, safe='')))
+		return FastlyVCLSnippet(self, content)
+
+	def update_vcl_snippet(self, service_id, version_number, name_key, **kwargs):
+		"""Update the VCL Snippet for a particular service and version."""
+                if '_type' in kwargs:
+                        kwargs['type'] = kwargs['_type']
+		body = self._formdata(kwargs, FastlyVCLSnippet.FIELDS)
+		content = self._fetch("/service/%s/version/%d/snippet/%s" % (service_id, version_number, urllib.quote(name_key, safe='')), method="PUT", body=body)
+		return FastlySyslog(self, content)
+
+	def delete_vcl_snippet(self, service_id, version_number, name):
+		"""Delete the VCL Snippet for a particular service and version."""
+		content = self._fetch("/service/%s/version/%d/snippet/%s" % (service_id, version_number, urllib.quote(name, safe='')), method="DELETE")
+		return self._status(content)
+
 	def create_version(self, service_id, inherit_service_id=None, comment=None):
 		"""Create a version for a particular service."""
 		body = self._formdata({
@@ -1473,6 +1514,18 @@ class FastlyVCL(FastlyObject, IServiceVersionObject):
 		"content",
 		"main",
 		"vcl",
+	]
+
+
+class FastlyVCLSnippet(FastlyObject, IServiceVersionObject):
+	"""A VCL snippet is a piece of VCL put into a particular VCL function."""
+	FIELDS = [
+		"name",
+		"service_id",
+		"version",
+                "dynamic",
+		"type",
+		"priority",
 	]
 
 
