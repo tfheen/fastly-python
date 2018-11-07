@@ -1012,11 +1012,59 @@ class FastlyConnection(object):
 		content = self._fetch("/service/%s/version/%d/wordpress/%s" % (service_id, version_number, urllib.quote(name, safe='')), method="DELETE")
 		return self._status(content)
 
+	def list_logging_s3_endpoints(self, service_id, version_number):
+		"""Returns all Amazon S3 Logging endpoint Objects for the specified service and version."""
+		content = self._fetch("/service/%s/version/%d/logging/s3" % (service_id, version_number))
+		return map(lambda x: FastlyLoggingS3(self, x), content)
+
+	def create_logging_s3_endpoint(self,
+		service_id, version_number, name, access_key, bucket_name, secret_key,
+		domain="s3.amazonaws.com", format_="%h %l %u %t \"%r\" %>s %b",
+		format_version=2, gzip_level=0, message_type="classic",
+		path=None, period=3600, placement=None, redundancy=None,
+		response_condition=None, timestamp_format="%Y-%m-%dT%H:%M:%S.000"):
+		"""Creates a new Response Object."""
+		body = self._formdata({
+			"name": name,
+			"access_key": access_key,
+			"bucket_name": bucket_name,
+			"secret_key": secret_key,
+			"domain": domain,
+			"format": format_,
+			"format_version": format_version,
+			"gzip_level": gzip_level,
+			"message_type": message_type,
+			"path": path,
+			"period": period,
+			"placement": placement,
+			"redundancy": redundancy,
+			"response_condition": response_condition,
+			"timestamp_format": timestamp_format
+		}, FastlyLoggingS3.FIELDS)
+		content = self._fetch("/service/%s/version/%d/logging/s3" % (service_id, version_number), method="POST", body=body)
+		return FastlyLoggingS3(self, content)
+
+	def get_logging_s3_endpoint(self, service_id, version_number, name):
+		"""Gets the specified Amazon S3 Logging endpoint Object."""
+		content = self._fetch("/service/%s/version/%d/logging/s3/%s" % (service_id, version_number, urllib.quote(name, safe='')))
+		return FastlyLoggingS3(self, content)
+
+	def update_logging_s3_endpoint(self, service_id, version_number, name_key, **kwargs):
+		"""Updates the specified Amazon S3 Logging Object."""
+		body = self._formdata(kwargs, FastlyLoggingS3.FIELDS)
+		content = self._fetch("/service/%s/version/%d/logging/s3/%s" % (service_id, version_number, urllib.quote(name_key, safe='')), method="PUT", body=body)
+		return FastlyLoggingS3(self, content)
+
+	def delete_logging_s3_endpoint(self, service_id, version_number, name):
+		"""Deletes the specified Amazon S3 Logging Object."""
+		content = self._fetch("/service/%s/version/%d/logging/s3/%s" % (service_id, version_number, urllib.quote(name, safe='')), method="DELETE")
+		return self._status(content)
+
 	# TODO: Is this broken?
 	def delete_version(self, service_id, version_number):
 		content = self._fetch("/service/%s/version/%d" % (service_id, version_number), method="DELETE")
 		return self._status(content)
-	
+
 	def _status(self, status):
 		if not isinstance(status, FastlyStatus):
 			status = FastlyStatus(self, status)
@@ -1594,6 +1642,32 @@ class FastlyWordpress(FastlyObject, IServiceVersionObject):
 		"name",
 		"path",
 		"comment",
+	]
+
+
+class FastlyLoggingS3(FastlyObject, IServiceVersionObject, IDateStampedObject):
+	""""""
+	FIELDS = [
+		"access_key",
+		"bucket_name",
+		"created_at",
+		"deleted_at",
+		"domain",
+		"format",
+		"format_version",
+		"gzip_level",
+		"message_type",
+		"name",
+		"path",
+		"period",
+		"placement",
+		"redundancy",
+		"response_condition",
+		"secret_key",
+		"service_id",
+		"timestamp_format",
+		"updated_at",
+		"version"
 	]
 
 
