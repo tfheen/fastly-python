@@ -138,7 +138,7 @@ class FastlyConnection(object):
 		first_byte_timeout=15000,
 		between_bytes_timeout=10000,
 		error_threshold=0,
-		max_conn=20,
+		max_conn=200,
 		weight=100,
 		auto_loadbalance=False,
 		shield=None,
