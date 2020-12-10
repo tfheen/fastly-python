@@ -26,13 +26,15 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+from __future__ import absolute_import
+
 from datetime import datetime
 import httplib2
 import json
 import re
 import urllib
 
-from version import __version__
+from .version import __version__
 
 FASTLY_SCHEME = "https"
 FASTLY_HOST = "api.fastly.com"
