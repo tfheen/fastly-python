@@ -166,8 +166,8 @@ class FastlyConnection(object):
 			"request_condition": request_condition,
 			"healthcheck": healthcheck,
 			"comment": comment,
-                        "ssl_cert_hostname": ssl_cert_hostname,
-                        "ssl_sni_hostname": ssl_sni_hostname,
+			"ssl_cert_hostname": ssl_cert_hostname,
+			"ssl_sni_hostname": ssl_sni_hostname,
 			"min_tls_version": min_tls_version,
 			"max_tls_version": max_tls_version,
 		}, FastlyBackend.FIELDS)
@@ -269,8 +269,8 @@ class FastlyConnection(object):
 
 	def update_condition(self, service_id, version_number, name_key, **kwargs):
 		"""Updates the specified condition."""
-                if '_type' in kwargs:
-                        kwargs['type'] = kwargs['_type']
+		if '_type' in kwargs:
+			kwargs['type'] = kwargs['_type']
 		body = self._formdata(kwargs, FastlyCondition.FIELDS)
 		content = self._fetch("/service/%s/version/%d/condition/%s" % (service_id, version_number, urllib.quote(name_key, safe='')), method="PUT", body=body)
 		return FastlyCondition(self, content)
@@ -354,8 +354,8 @@ class FastlyConnection(object):
 
 	def update_director(self, service_id, version_number, name_key, **kwargs):
 		"""Update the director for a particular service and version."""
-                if '_type' in kwargs:
-                        kwargs['type'] = kwargs['_type']
+		if '_type' in kwargs:
+			kwargs['type'] = kwargs['_type']
 		body = self._formdata(kwargs, FastlyDirector.FIELDS)
 		content = self._fetch("/service/%s/version/%d/director/%s" % (service_id, version_number, urllib.quote(name_key, safe='')), method="PUT", body=body)
 		return FastlyDirector(self, content)
@@ -494,8 +494,8 @@ class FastlyConnection(object):
 
 	def update_header(self, service_id, version_number, name_key, **kwargs):
 		"""Modifies an existing Header object by name."""
-                if '_type' in kwargs:
-                        kwargs['type'] = kwargs['_type']
+		if '_type' in kwargs:
+			kwargs['type'] = kwargs['_type']
 		body = self._formdata(kwargs, FastlyHeader.FIELDS)
 		content = self._fetch("/service/%s/version/%d/header/%s" % (service_id, version_number, urllib.quote(name_key, safe='')), method="PUT", body=body)
 		return FastlyHeader(self, content)
@@ -888,21 +888,21 @@ class FastlyConnection(object):
 		return map(lambda x: FastlyVCLSnippet(self, x), content)
 
 	def create_vcl_snippet(
-		        self,
-		        service_id,
-		        version_number,
-		        name,
-		        priority,
-                        _type,
-                        content,
-		        dynamic="0"):
+			self,
+			service_id,
+			version_number,
+			name,
+			priority,
+			_type,
+			content,
+			dynamic="0"):
 		"""Create a VCL snippet for a particular service and version."""
 		body = self._formdata({
 			"name": name,
 			"dynamic": str(dynamic),
 			"priority": priority,
 			"type": _type,
-                        "content": content,
+			"content": content,
 		}, FastlyVCLSnippet.FIELDS)
 		content = self._fetch("/service/%s/version/%d/snippet" % (service_id, version_number), method="POST", body=body)
 		return FastlyVCLSnippet(self, content)
@@ -914,8 +914,8 @@ class FastlyConnection(object):
 
 	def update_vcl_snippet(self, service_id, version_number, name_key, **kwargs):
 		"""Update the VCL Snippet for a particular service and version."""
-                if '_type' in kwargs:
-                        kwargs['type'] = kwargs['_type']
+		if '_type' in kwargs:
+			kwargs['type'] = kwargs['_type']
 		body = self._formdata(kwargs, FastlyVCLSnippet.FIELDS)
 		content = self._fetch("/service/%s/version/%d/snippet/%s" % (service_id, version_number, urllib.quote(name_key, safe='')), method="PUT", body=body)
 		return FastlyVCLSnippet(self, content)
@@ -1237,16 +1237,16 @@ class FastlyBackend(FastlyObject, IServiceVersionObject):
 		"request_condition",
 		"healthcheck",
 		"comment",
-                "ssl_cert_hostname",
-                "ssl_sni_hostname",
+		"ssl_cert_hostname",
+		"ssl_sni_hostname",
 		"min_tls_version",
 		"max_tls_version",
 	]
 
 	@property
 	def healthcheck(self):
-                if not self.__getattr__('healthcheck'):
-                        return None
+		if not self.__getattr__('healthcheck'):
+			return None
 		return self._conn.get_healthcheck(self.service_id, self.version, self.__getattr__("healthcheck"))
 
 
@@ -1274,7 +1274,7 @@ class FastlyCondition(FastlyObject, IServiceVersionObject):
 		"type",
 		"statement",
 		"priority",
-                "comment",
+		"comment",
 	]
 
 
@@ -1317,7 +1317,7 @@ class FastlyDirector(FastlyObject, IServiceVersionObject, IDateStampedObject):
 		"deleted",
 		"capacity",
 		"comment",
-                "backends",
+		"backends",
 	]
 
 
@@ -1575,10 +1575,10 @@ class FastlyVCLSnippet(FastlyObject, IServiceVersionObject):
 		"name",
 		"service_id",
 		"version",
-                "dynamic",
+		"dynamic",
 		"type",
 		"priority",
-                "content",
+		"content",
 	]
 
 
