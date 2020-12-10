@@ -1132,7 +1132,7 @@ class FastlyConnection(object):
 
 		if payload is None:
 			raise Exception("HTTP Error %d occurred." % status)
-		elif isinstance(payload, basestring):
+		elif isinstance(payload, (type(b''), type(u''))):
 			raise Exception("HTTP Error %d occurred. { %s }" % (status, payload))
 		else:
 			payload["status"] = "error"
