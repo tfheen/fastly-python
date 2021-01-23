@@ -1244,6 +1244,7 @@ class FastlyBackend(FastlyObject, IServiceVersionObject):
 		"request_condition",
 		"healthcheck",
 		"comment",
+		"ssl_hostname",
 		"ssl_cert_hostname",
 		"ssl_sni_hostname",
 		"min_tls_version",
