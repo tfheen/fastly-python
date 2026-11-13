@@ -131,7 +131,7 @@ class FastlyConnection(object):
 	def list_backends(self, service_id, version_number):
 		"""List all backends for a particular service and version."""
 		content = self._fetch("/service/%s/version/%d/backend" % (service_id, version_number))
-		return map(lambda x: FastlyBackend(self, x), content)
+		return [FastlyBackend(self, x) for x in content]
 
 	def create_backend(
 		self,
@@ -212,7 +212,7 @@ class FastlyConnection(object):
 	def list_cache_settings(self, service_id, version_number):
 		"""Get a list of all cache settings for a particular service and version."""
 		content = self._fetch("/service/%s/version/%d/cache_settings" % (service_id, version_number))
-		return map(lambda x: FastlyCacheSettings(self, x), content)
+		return [FastlyCacheSettings(self, x) for x in content]
 
 	def create_cache_settings(
 		self,
@@ -253,7 +253,7 @@ class FastlyConnection(object):
 	def list_conditions(self, service_id, version_number):
 		"""Gets all conditions for a particular service and version."""
 		content = self._fetch("/service/%s/version/%d/condition" % (service_id, version_number))
-		return map(lambda x: FastlyCondition(self, x), content)
+		return [FastlyCondition(self, x) for x in content]
 
 	def create_condition(
 		self,
@@ -321,7 +321,7 @@ class FastlyConnection(object):
 	def list_customer_users(self, customer_id):
 		"""List all users from a specified customer id."""
 		content = self._fetch("/customer/users/%s" % customer_id)
-		return map(lambda x: FastlyUser(self, x), content)
+		return [FastlyUser(self, x) for x in content]
 
 	def update_customer(self, customer_id, **kwargs):
 		"""Update a customer."""
@@ -337,7 +337,7 @@ class FastlyConnection(object):
 	def list_directors(self, service_id, version_number):
 		"""List the directors for a particular service and version."""
 		content = self._fetch("/service/%s/version/%d/director" % (service_id, version_number))
-		return map(lambda x: FastlyDirector(self, x), content)
+		return [FastlyDirector(self, x) for x in content]
 
 	def create_director(
 		self,
@@ -396,7 +396,7 @@ class FastlyConnection(object):
 	def list_domains(self, service_id, version_number):
 		"""List the domains for a particular service and version."""
 		content = self._fetch("/service/%s/version/%d/domain" % (service_id, version_number))
-		return map(lambda x: FastlyDomain(self, x), content)
+		return [FastlyDomain(self, x) for x in content]
 
 	def create_domain(
 		self,
@@ -437,7 +437,7 @@ class FastlyConnection(object):
 	def check_domains(self, service_id, version_number):
 		"""Checks the status of all domain DNS records for a Service Version. Returns an array items in the same format as the single domain /check."""
 		content = self._fetch("/service/%s/version/%d/domain/check_all" % (service_id, version_number))
-		return map(lambda x: FastlyDomainCheck(self, x), content)
+		return [FastlyDomainCheck(self, x) for x in content]
 
 	def get_event_log(self, object_id):
 		"""Get the specified event log."""
@@ -447,7 +447,7 @@ class FastlyConnection(object):
 	def list_gzip(self, service_id, version_number):
 		"""List all gzip configurations for a particular service and version"""
 		content = self._fetch("/service/%s/version/%d/gzip" % (service_id, version_number))
-		return map(lambda x: FastlyGzip(self, x), content)
+		return [FastlyGzip(self, x) for x in content]
 
 	def create_gzip(self, service_id, version_number, name, cache_condition=None, content_types=None, extensions=None):
 		body = self._formdata({
@@ -479,7 +479,7 @@ class FastlyConnection(object):
 	def list_headers(self, service_id, version_number):
 		"""Retrieves all Header objects for a particular Version of a Service."""
 		content = self._fetch("/service/%s/version/%d/header" % (service_id, version_number))
-		return map(lambda x: FastlyHeader(self, x), content)
+		return [FastlyHeader(self, x) for x in content]
 
 	def create_header(self, service_id, version_number, name, dst, src, _type=FastlyHeaderType.RESPONSE, action=FastlyHeaderAction.SET, regex=None, substitution=None, ignore_if_set=None, priority=10, response_condition=None, cache_condition=None, request_condition=None):
 		body = self._formdata({
@@ -521,7 +521,7 @@ class FastlyConnection(object):
 	def list_healthchecks(self, service_id, version_number):
 		"""List all of the healthchecks for a particular service and version."""
 		content = self._fetch("/service/%s/version/%d/healthcheck" % (service_id, version_number))
-		return map(lambda x: FastlyHealthCheck(self, x), content)
+		return [FastlyHealthCheck(self, x) for x in content]
 
 	def create_healthcheck(
 		self,
@@ -579,12 +579,12 @@ class FastlyConnection(object):
 	def check_purge_status(self, purge_id):
 		"""Get the status and times of a recently completed purge."""
 		content = self._fetch("/purge?id=%s" % purge_id)
-		return map(lambda x: FastlyPurgeStatus(self, x), content)
+		return [FastlyPurgeStatus(self, x) for x in content]
 
 	def list_request_settings(self, service_id, version_number):
 		"""Returns a list of all Request Settings objects for the given service and version."""
 		content = self._fetch("/service/%s/version/%d/request_settings" % (service_id, version_number))
-		return map(lambda x: FastlyRequestSetting(self, x), content)
+		return [FastlyRequestSetting(self, x) for x in content]
 
 	def create_request_setting(
 		self,
@@ -639,7 +639,7 @@ class FastlyConnection(object):
 	def list_response_objects(self, service_id, version_number):
 		"""Returns all Response Objects for the specified service and version."""
 		content = self._fetch("/service/%s/version/%d/response_object" % (service_id, version_number))
-		return map(lambda x: FastlyResponseObject(self, x), content)
+		return [FastlyResponseObject(self, x) for x in content]
 
 	def create_response_object(self, service_id, version_number, name, status="200", response="OK", content="", request_condition=None, cache_condition=None):
 		"""Creates a new Response Object."""
@@ -684,7 +684,7 @@ class FastlyConnection(object):
 	def list_services(self):
 		"""List Services."""
 		content = self._fetch("/service")
-		return map(lambda x: FastlyService(self, x), content)
+		return [FastlyService(self, x) for x in content]
 
 	def get_service(self, service_id):
 		"""Get a specific service by id."""
@@ -715,7 +715,7 @@ class FastlyConnection(object):
 	def list_domains_by_service(self, service_id):
 		"""List the domains within a service."""
 		content = self._fetch("/service/%s/domain" % service_id, method="GET")
-		return map(lambda x: FastlyDomain(self, x), content)
+		return [FastlyDomain(self, x) for x in content]
 
 	def purge_service(self, service_id):
 		"""Purge everything from a service."""
@@ -746,7 +746,7 @@ class FastlyConnection(object):
 	def list_syslogs(self, service_id, version_number):
 		"""List all of the Syslogs for a particular service and version."""
 		content = self._fetch("/service/%s/version/%d/syslog" % (service_id, version_number))
-		return map(lambda x: FastlySyslog(self, x), content)
+		return [FastlySyslog(self, x) for x in content]
 
 	def create_syslog(
 		self,
@@ -841,7 +841,7 @@ class FastlyConnection(object):
 	def list_vcls(self, service_id, version_number):
 		"""List the uploaded VCLs for a particular service and version."""
 		content = self._fetch("/service/%s/version/%d/vcl" % (service_id, version_number))
-		return map(lambda x: FastlyVCL(self, x), content)
+		return [FastlyVCL(self, x) for x in content]
 
 	def upload_vcl(self, service_id, version_number, name, content, main=None, comment=None):
 		"""Upload a VCL for a particular service and version."""
@@ -898,7 +898,7 @@ class FastlyConnection(object):
 	def list_vcl_snippets(self, service_id, version_number):
 		"""List all of the VCL snippets for a particular service and version."""
 		content = self._fetch("/service/%s/version/%d/snippet" % (service_id, version_number))
-		return map(lambda x: FastlyVCLSnippet(self, x), content)
+		return [FastlyVCLSnippet(self, x) for x in content]
 
 	def create_vcl_snippet(
 			self,
@@ -950,7 +950,7 @@ class FastlyConnection(object):
 		
 	def list_versions(self, service_id):
 		content = self._fetch("/service/%s/version" % service_id)
-		return map(lambda x: FastlyVersion(self, x), content)
+		return [FastlyVersion(self, x) for x in content]
 
 	def get_version(self, service_id, version_number):
 		"""Get the version for a particular service."""
@@ -991,7 +991,7 @@ class FastlyConnection(object):
 	def list_wordpressess(self, service_id, version_number):
 		"""Get all of the wordpresses for a specified service and version."""
 		content = self._fetch("/service/%s/version/%d/wordpress" % (service_id, version_number))
-		return map(lambda x: FastlyWordpress(self, x), content)
+		return [FastlyWordpress(self, x) for x in content]
 
 	def create_wordpress(
 		self,
@@ -1028,7 +1028,7 @@ class FastlyConnection(object):
 	def list_logging_s3_endpoints(self, service_id, version_number):
 		"""Returns all Amazon S3 Logging endpoint Objects for the specified service and version."""
 		content = self._fetch("/service/%s/version/%d/logging/s3" % (service_id, version_number))
-		return map(lambda x: FastlyLoggingS3(self, x), content)
+		return [FastlyLoggingS3(self, x) for x in content]
 
 	def create_logging_s3_endpoint(self,
 		service_id, version_number, name, access_key, bucket_name, secret_key,
