@@ -141,7 +141,7 @@ class FastlyConnection(object):
 		address,
 		use_ssl=False,
 		port=80,
-		prefer_ipv6=False,
+		prefer_ipv6=None,
 		connect_timeout=1000,
 		first_byte_timeout=15000,
 		between_bytes_timeout=10000,
